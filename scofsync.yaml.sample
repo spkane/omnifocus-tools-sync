@@ -1,0 +1,9 @@
+---
+servercentral:
+  hostname: 'portal.servercentral.com'
+  username: 'me@example.com'
+  password: 'password'
+  context:  'Office'
+  project:  'ServerCentral'
+  flag:     true
+  filter:   ''

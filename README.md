@@ -1,5 +1,12 @@
-jira-omnifocus
-==============
+omnifocus-tools-sync
+====================
+
+*Note*: Most of this README is for the original 
+[jira-omnifocus](https://github.com/devondragon/jira-omnifocus) script. 
+This repo, now also has a script for Omnifocus and 
+[ServerCentral](https://support.servercentral.com/) synchronization as 
+well.
+
 
 Ruby script to create and manage OmniFocus tasks based on your Jira tickets
 

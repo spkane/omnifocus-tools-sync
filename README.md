@@ -1,7 +1,7 @@
 omnifocus-tools-sync
 ====================
 
-*Note*: Most of this README is for the original 
+**Note**: Most of this README is for the original 
 [jira-omnifocus](https://github.com/devondragon/jira-omnifocus) script. 
 This repo, now also has a script for Omnifocus and 
 [ServerCentral](https://support.servercentral.com/) synchronization as 
@@ -35,10 +35,11 @@ Make sure that you have a project in context in Omnifocus that matches what you 
 
 You can run the script manually or you can add a cron entry to run it periodically (it will take a minute or so to run so don't run it too often).
 
-You can use crontab -e to edit your user crontab and create an entry like this:
+You can use crontab -e to edit your user crontab and create entries like these:
 
 ```
-*/10 * * * * cd ~/dev/git/jira-omnifocus/bin && ./jiraomnifocus.rb
+*/10 * * * * cd ~/dev/git/omnifocus-tools-sync/bin && ./jiraomnifocus.rb
+*/10 * * * * cd ~/dev/git/omnifocus-tools-sync/bin && ./scomnifocus.rb
 ```
 
 That should be it!  If it doesn't work, try adding some puts debug statements and running it manually.  

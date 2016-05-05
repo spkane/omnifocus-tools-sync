@@ -91,7 +91,7 @@ DEFAULT_CONTEXT = opts[:context]
 DEFAULT_PROJECT = opts[:project]
 FLAGGED = opts[:flag]
 
-# This method gets all issues that are assigned to your USERNAME and whos status isn't Closed or Resolved.  It returns a Hash where the key is the ServerCentral Ticket ID and the value is the ServerCentral Ticket Subject.
+# This method gets all issues that are assigned to your USERNAME and whos status isn't Closed or Resolved.  It returns a Hash of Hashes where the key is the ServerCentral Ticket ID.
 def get_issues
   sc_issues = Hash.new
   # This is the REST URL that will be hit.  Change the filter if you want to adjust the query used here
@@ -120,6 +120,7 @@ def get_issues
       # If the response was good, then grab the data
       if currentResponse.code =~ /20[0-9]{1}/
         data = JSON.parse(currentResponse.body)
+        puts data
         if data["status"] != 0 then raise StandardError, "Unsuccessful API status code: " + data["status"] end
       else
         raise StandardError, "Unsuccessful HTTP response code: " + currentResponse.code
@@ -127,7 +128,9 @@ def get_issues
       if data["status"] != 0 then raise StandardError, "Unsuccessful API status code: " + data["status"] end
       data["ticketData"]["Tickets"].each do |item|
         sc_id = item["Ticket"]["Id"]
-        sc_issues[sc_id] = item["Ticket"]["Subject"]
+        sc_issues[sc_id] = Hash.new
+        sc_issues[sc_id]['subject'] = item["Ticket"]["Subject"]
+        #sc_issues['ticket']['posts'] = item["Ticket"]["Posts"]
       end
       currentPage = currentPage + 1
     end
@@ -190,11 +193,11 @@ def add_sc_tickets_to_omnifocus ()
   omnifocus_document = omnifocus_app.default_document
 
   # Iterate through resulting issues.
-  results.each do |sc_id, summary|
+  results.each do |ticket|
     # Create the task name by adding the ticket summary to the ServerCentral ticket key
-    task_name = "#{sc_id}: #{summary}"
+    task_name = "#{ticket[0]}: #{ticket[1]['subject']}"
     # Create the task notes with the ServerCentral Ticket URL
-    task_notes = "#{SC_VIEW_URL}#{sc_id}"
+    task_notes = "#{SC_VIEW_URL}#{ticket[0]}"
 
     # Build properties for the Task
     @props = {}
@@ -237,7 +240,7 @@ def mark_resolved_sc_tickets_as_complete_in_omnifocus ()
             end
           end
         else
-         raise StandardError, "Unsuccessful response code " + response.code + " for issue " + issue
+         raise StandardError, "Unsuccessful response code " + response.code + " for issue " + sc_id
         end
       end
     end
